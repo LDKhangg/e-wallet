@@ -57,4 +57,17 @@ public final class Wallet {
     public int hashCode() {
         return Objects.hash(id, userId, balance, version);
     }
+
+    public Wallet debit(Money amount){
+      Objects.requireNonNull(amount,"amount must not be null");
+      if(balance.isLessThan(amount)){
+        throw new InsufficientFundsException(id);
+      }
+
+      return new Wallet(id,userId,balance.subtract(amount), version);
+    }
+    public Wallet credit(Money amount){
+      Objects.requireNonNull(amount,"amount must not be null");
+      return new Wallet(id,userId,balance.add(amount),version);
+    }
 }

@@ -1,4 +1,4 @@
-package com.wallet.app.wallet.adapter.out.persistence;
+package com.wallet.app.wallet.adapter.out.persistence.wallet;
 
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;

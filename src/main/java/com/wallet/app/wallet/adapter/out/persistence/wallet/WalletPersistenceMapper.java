@@ -1,5 +1,6 @@
-package com.wallet.app.wallet.adapter.out.persistence;
+package com.wallet.app.wallet.adapter.out.persistence.wallet;
 
+import com.wallet.app.wallet.adapter.out.persistence.transaction.TransactionJpaEntity;
 import com.wallet.app.wallet.domain.Money;
 import com.wallet.app.wallet.domain.Transaction;
 import com.wallet.app.wallet.domain.TransactionId;
@@ -9,7 +10,7 @@ import com.wallet.app.wallet.domain.WalletId;
 import org.springframework.stereotype.Component;
 
 @Component
-class WalletPersistenceMapper {
+public class WalletPersistenceMapper {
 
     WalletJpaEntity toEntity(Wallet wallet) {
         return new WalletJpaEntity(
@@ -24,7 +25,7 @@ class WalletPersistenceMapper {
                 wallet.version());
     }
 
-    TransactionJpaEntity toEntity(Transaction transaction) {
+    public TransactionJpaEntity toEntity(Transaction transaction) {
         return new TransactionJpaEntity(
                 transaction.id().value(),
                 transaction.sourceWalletId().value(),
@@ -33,7 +34,7 @@ class WalletPersistenceMapper {
                 transaction.status());
     }
 
-    Transaction toDomain(TransactionJpaEntity transaction) {
+    public Transaction toDomain(TransactionJpaEntity transaction) {
         return Transaction.restore(
                 new TransactionId(transaction.id()),
                 new WalletId(transaction.sourceWalletId()),

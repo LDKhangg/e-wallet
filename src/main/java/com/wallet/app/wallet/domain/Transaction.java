@@ -19,6 +19,11 @@ public final class Transaction {
         this.id = Objects.requireNonNull(id, "id must not be null");
         this.sourceWalletId = Objects.requireNonNull(sourceWalletId, "sourceWalletId must not be null");
         this.destinationWalletId = Objects.requireNonNull(destinationWalletId, "destinationWalletId must not be null");
+        if (this.sourceWalletId.equals(this.destinationWalletId)){
+          throw new IllegalArgumentException(
+            "source and destination wallets must be different"
+          );
+        }
         this.amount = Objects.requireNonNull(amount, "amount must not be null");
         if (amount.amount().signum() == 0) {
             throw new IllegalArgumentException("amount must be greater than zero");
@@ -74,4 +79,31 @@ public final class Transaction {
     public int hashCode() {
         return Objects.hash(id, sourceWalletId, destinationWalletId, amount, status);
     }
+
+    public static Transaction start(WalletId sourceWalletId,
+                                  WalletId destinationWalletId,
+                                  Money amount){
+      return new Transaction(
+        TransactionId.newId(),
+        sourceWalletId,
+        destinationWalletId,
+        amount,
+        TransactionStatus.PENDING);
+    }
+    public Transaction complete(){
+      if(status!=TransactionStatus.PENDING){
+        throw new IllegalStateException(
+          "only pending transactions can be completed"
+        );
+      }
+
+      return new Transaction(
+        id,
+        sourceWalletId,
+        destinationWalletId,
+        amount,
+        TransactionStatus.COMPLETED
+      );
+    }
+
 }

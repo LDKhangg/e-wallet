@@ -1,4 +1,4 @@
-package com.wallet.app.wallet.adapter.out.persistence;
+package com.wallet.app.wallet.adapter.out.persistence.transaction;
 
 import com.wallet.app.wallet.domain.TransactionStatus;
 import jakarta.persistence.Column;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "transactions")
-class TransactionJpaEntity {
+public class TransactionJpaEntity {
 
     @Id
     private UUID id;
@@ -33,12 +33,12 @@ class TransactionJpaEntity {
     protected TransactionJpaEntity() {
     }
 
-    TransactionJpaEntity(
-            UUID id,
-            UUID sourceWalletId,
-            UUID destinationWalletId,
-            BigDecimal amount,
-            TransactionStatus status) {
+    public TransactionJpaEntity(
+      UUID id,
+      UUID sourceWalletId,
+      UUID destinationWalletId,
+      BigDecimal amount,
+      TransactionStatus status) {
         this.id = id;
         this.sourceWalletId = sourceWalletId;
         this.destinationWalletId = destinationWalletId;
@@ -46,23 +46,23 @@ class TransactionJpaEntity {
         this.status = status;
     }
 
-    UUID id() {
+    public UUID id() {
         return id;
     }
 
-    UUID sourceWalletId() {
+    public UUID sourceWalletId() {
         return sourceWalletId;
     }
 
-    UUID destinationWalletId() {
+    public UUID destinationWalletId() {
         return destinationWalletId;
     }
 
-    BigDecimal amount() {
+    public BigDecimal amount() {
         return amount;
     }
 
-    TransactionStatus status() {
+    public TransactionStatus status() {
         return status;
     }
 }

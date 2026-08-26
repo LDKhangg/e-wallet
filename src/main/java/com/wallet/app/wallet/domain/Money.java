@@ -30,4 +30,19 @@ public record Money(BigDecimal amount) {
     public static Money of(long amount) {
         return of(BigDecimal.valueOf(amount));
     }
+
+    public Money add(Money other){
+      Objects.requireNonNull(other,"other must not be null");
+      return Money.of(amount.add(other.amount));
+    }
+
+    public Money subtract(Money other) {
+      Objects.requireNonNull(other,"other must not be null");
+      return Money.of(amount.subtract(other.amount));
+    }
+
+    public boolean isLessThan(Money other){
+      Objects.requireNonNull(other,"other must not be null");
+      return amount.compareTo(other.amount)<0;
+    }
 }

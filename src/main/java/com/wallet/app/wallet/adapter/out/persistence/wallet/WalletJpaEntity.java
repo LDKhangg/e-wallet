@@ -1,4 +1,4 @@
-package com.wallet.app.wallet.adapter.out.persistence;
+package com.wallet.app.wallet.adapter.out.persistence.wallet;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
