@@ -16,3 +16,11 @@
 ```shell
 docker compose up -d
 ```
+
+## Run the application
+
+```shell
+./gradlew bootRun
+```
+
+This commit intentionally has no HTTP API or transfer behavior.
