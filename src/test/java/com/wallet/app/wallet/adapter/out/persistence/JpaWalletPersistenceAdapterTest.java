@@ -17,7 +17,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest
 @Testcontainers(disabledWithoutDocker = true)
-class JpaWalletPersistenceAdapterIT {
+class JpaWalletPersistenceAdapterTest {
 
     @Container
     @ServiceConnection
