@@ -1,5 +1,6 @@
 package com.wallet.app.wallet.adapter.in.web;
 
+import com.wallet.app.wallet.application.port.in.WalletAlreadyExistsException;
 import com.wallet.app.wallet.application.port.in.WalletNotFoundException;
 import com.wallet.app.wallet.domain.InsufficientFundsException;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,12 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 @RestControllerAdvice
 public class TransferExceptionHandler {
+
+    @ExceptionHandler(WalletAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public TransferErrorResponse handleWalletAlreadyExists(WalletAlreadyExistsException exception) {
+        return new TransferErrorResponse("WALLET_ALREADY_EXISTS", exception.getMessage());
+    }
 
     @ExceptionHandler(WalletNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
