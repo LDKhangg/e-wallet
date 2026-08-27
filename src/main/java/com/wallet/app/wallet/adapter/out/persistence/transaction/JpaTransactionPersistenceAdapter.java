@@ -1,6 +1,5 @@
 package com.wallet.app.wallet.adapter.out.persistence.transaction;
 
-import com.wallet.app.wallet.adapter.out.persistence.wallet.WalletPersistenceMapper;
 import com.wallet.app.wallet.application.port.out.TransactionRepositoryPort;
 import com.wallet.app.wallet.domain.Transaction;
 import com.wallet.app.wallet.domain.TransactionId;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Repository;
 class JpaTransactionPersistenceAdapter implements TransactionRepositoryPort {
 
     private final SpringDataTransactionRepository repository;
-    private final WalletPersistenceMapper mapper;
+    private final TransactionPersistenceMapper mapper;
 
     @Override
     public Optional<Transaction> findById(TransactionId id) {

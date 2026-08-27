@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "transactions")
-public class TransactionJpaEntity {
+class TransactionJpaEntity {
 
     @Id
     private UUID id;
@@ -33,7 +33,7 @@ public class TransactionJpaEntity {
     protected TransactionJpaEntity() {
     }
 
-    public TransactionJpaEntity(
+    TransactionJpaEntity(
       UUID id,
       UUID sourceWalletId,
       UUID destinationWalletId,
@@ -46,23 +46,23 @@ public class TransactionJpaEntity {
         this.status = status;
     }
 
-    public UUID id() {
+    UUID id() {
         return id;
     }
 
-    public UUID sourceWalletId() {
+    UUID sourceWalletId() {
         return sourceWalletId;
     }
 
-    public UUID destinationWalletId() {
+    UUID destinationWalletId() {
         return destinationWalletId;
     }
 
-    public BigDecimal amount() {
+    BigDecimal amount() {
         return amount;
     }
 
-    public TransactionStatus status() {
+    TransactionStatus status() {
         return status;
     }
 }

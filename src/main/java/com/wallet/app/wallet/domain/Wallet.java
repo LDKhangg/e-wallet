@@ -70,4 +70,8 @@ public final class Wallet {
       Objects.requireNonNull(amount,"amount must not be null");
       return new Wallet(id,userId,balance.add(amount),version);
     }
+
+    public static Wallet create(UserId userId){
+      return new Wallet(WalletId.newId(),userId,Money.of(0),0);
+    }
 }
