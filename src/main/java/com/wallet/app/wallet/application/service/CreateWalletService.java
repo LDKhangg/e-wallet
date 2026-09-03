@@ -4,7 +4,6 @@ import com.wallet.app.wallet.application.port.in.CreateWalletCommand;
 import com.wallet.app.wallet.application.port.in.CreateWalletUseCase;
 import com.wallet.app.wallet.application.port.in.WalletAlreadyExistsException;
 import com.wallet.app.wallet.application.port.out.WalletRepositoryPort;
-import com.wallet.app.wallet.domain.UserId;
 import com.wallet.app.wallet.domain.Wallet;
 import com.wallet.app.wallet.domain.WalletId;
 import lombok.RequiredArgsConstructor;
