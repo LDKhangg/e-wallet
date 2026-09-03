@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface TransactionRepositoryPort {
 
-    Optional<Transaction> findById(TransactionId id);
+  Optional<Transaction> findById(TransactionId id);
 
-    Transaction save(Transaction transaction);
+  Transaction save(Transaction transaction);
 }

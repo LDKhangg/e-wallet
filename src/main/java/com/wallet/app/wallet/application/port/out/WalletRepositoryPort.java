@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface WalletRepositoryPort {
 
-    Optional<Wallet> findById(WalletId id);
+  Optional<Wallet> findById(WalletId id);
 
-    Wallet save(Wallet wallet);
+  Wallet save(Wallet wallet);
 
-    Optional<Wallet> findByUserId(UserId userId);
+  Optional<Wallet> findByUserId(UserId userId);
 }

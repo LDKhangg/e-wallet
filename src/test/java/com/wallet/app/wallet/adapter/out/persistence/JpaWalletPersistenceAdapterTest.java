@@ -19,19 +19,17 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers(disabledWithoutDocker = true)
 class JpaWalletPersistenceAdapterTest {
 
-    @Container
-    @ServiceConnection
-    static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+  @Container @ServiceConnection
+  static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
-    @Autowired
-    WalletRepositoryPort wallets;
+  @Autowired WalletRepositoryPort wallets;
 
-    @Test
-    void saves_and_restores_wallet() {
-        Wallet wallet = Wallet.restore(WalletId.newId(), UserId.newId(), Money.of(100_000), 0);
+  @Test
+  void saves_and_restores_wallet() {
+    Wallet wallet = Wallet.restore(WalletId.newId(), UserId.newId(), Money.of(100_000), 0);
 
-        wallets.save(wallet);
+    wallets.save(wallet);
 
-        assertThat(wallets.findById(wallet.id())).contains(wallet);
-    }
+    assertThat(wallets.findById(wallet.id())).contains(wallet);
+  }
 }

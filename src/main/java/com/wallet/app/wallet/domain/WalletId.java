@@ -5,11 +5,11 @@ import java.util.UUID;
 
 public record WalletId(UUID value) {
 
-    public WalletId {
-        Objects.requireNonNull(value, "value must not be null");
-    }
+  public WalletId {
+    Objects.requireNonNull(value, "value must not be null");
+  }
 
-    public static WalletId newId() {
-        return new WalletId(UUID.randomUUID());
-    }
+  public static WalletId newId() {
+    return new WalletId(UUID.randomUUID());
+  }
 }

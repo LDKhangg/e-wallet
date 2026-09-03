@@ -17,11 +17,12 @@ public class TransferController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public TransferResponse transfer(@RequestBody TransferRequest request){
-    TransferMoneyCommand command = new TransferMoneyCommand(
-      new WalletId(request.sourceWalletId()),
-      new WalletId(request.destinationWalletId()),
-      Money.of(request.amount()));
+  public TransferResponse transfer(@RequestBody TransferRequest request) {
+    TransferMoneyCommand command =
+        new TransferMoneyCommand(
+            new WalletId(request.sourceWalletId()),
+            new WalletId(request.destinationWalletId()),
+            Money.of(request.amount()));
     TransactionId transactionId = transferMoneyUseCase.transfer(command);
     return new TransferResponse(transactionId.value());
   }

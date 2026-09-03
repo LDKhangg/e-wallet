@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/wallets")
 public class WalletController {
 
-    private final CreateWalletUseCase createWalletUseCase;
+  private final CreateWalletUseCase createWalletUseCase;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CreateWalletResponse create(@RequestBody CreateWalletRequest request) {
-        WalletId walletId = createWalletUseCase.create(
-            new CreateWalletCommand(new UserId(request.userId()))
-        );
-        return new CreateWalletResponse(walletId.value());
-    }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public CreateWalletResponse create(@RequestBody CreateWalletRequest request) {
+    WalletId walletId =
+        createWalletUseCase.create(new CreateWalletCommand(new UserId(request.userId())));
+    return new CreateWalletResponse(walletId.value());
+  }
 }

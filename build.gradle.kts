@@ -39,7 +39,7 @@ tasks.withType<Test> {
 spotless{
     java{
         target("src/**/*.java")
-        googleJavaFormat("1.19.0")
+        googleJavaFormat("1.23.0")
         removeUnusedImports()
         trimTrailingWhitespace()
     }

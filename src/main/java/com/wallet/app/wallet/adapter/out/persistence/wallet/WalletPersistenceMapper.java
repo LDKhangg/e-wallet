@@ -9,18 +9,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class WalletPersistenceMapper {
 
-    WalletJpaEntity toEntity(Wallet wallet) {
-        return new WalletJpaEntity(
-                wallet.id().value(), wallet.userId().value(), wallet.balance().amount(), wallet.version());
-    }
+  WalletJpaEntity toEntity(Wallet wallet) {
+    return new WalletJpaEntity(
+        wallet.id().value(), wallet.userId().value(), wallet.balance().amount(), wallet.version());
+  }
 
-    Wallet toDomain(WalletJpaEntity wallet) {
-        return Wallet.restore(
-                new WalletId(wallet.id()),
-                new UserId(wallet.userId()),
-                Money.of(wallet.balance()),
-                wallet.version());
-    }
-
-
+  Wallet toDomain(WalletJpaEntity wallet) {
+    return Wallet.restore(
+        new WalletId(wallet.id()),
+        new UserId(wallet.userId()),
+        Money.of(wallet.balance()),
+        wallet.version());
+  }
 }

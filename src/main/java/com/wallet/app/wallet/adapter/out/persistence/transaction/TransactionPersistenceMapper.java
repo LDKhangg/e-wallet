@@ -10,19 +10,19 @@ import org.springframework.stereotype.Component;
 class TransactionPersistenceMapper {
   TransactionJpaEntity toEntity(Transaction transaction) {
     return new TransactionJpaEntity(
-      transaction.id().value(),
-      transaction.sourceWalletId().value(),
-      transaction.destinationWalletId().value(),
-      transaction.amount().amount(),
-      transaction.status());
+        transaction.id().value(),
+        transaction.sourceWalletId().value(),
+        transaction.destinationWalletId().value(),
+        transaction.amount().amount(),
+        transaction.status());
   }
 
   Transaction toDomain(TransactionJpaEntity transaction) {
     return Transaction.restore(
-      new TransactionId(transaction.id()),
-      new WalletId(transaction.sourceWalletId()),
-      new WalletId(transaction.destinationWalletId()),
-      Money.of(transaction.amount()),
-      transaction.status());
+        new TransactionId(transaction.id()),
+        new WalletId(transaction.sourceWalletId()),
+        new WalletId(transaction.destinationWalletId()),
+        Money.of(transaction.amount()),
+        transaction.status());
   }
 }

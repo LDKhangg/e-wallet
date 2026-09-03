@@ -6,11 +6,10 @@ import com.wallet.app.wallet.application.port.in.WalletAlreadyExistsException;
 import com.wallet.app.wallet.application.port.out.WalletRepositoryPort;
 import com.wallet.app.wallet.domain.Wallet;
 import com.wallet.app.wallet.domain.WalletId;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -20,13 +19,13 @@ public class CreateWalletService implements CreateWalletUseCase {
   @Override
   @Transactional
   public WalletId create(CreateWalletCommand command) {
-    Objects.requireNonNull(command,"command must not be null");
+    Objects.requireNonNull(command, "command must not be null");
 
-    if(walletRepositoryPort.findByUserId(command.userId()).isPresent()){
+    if (walletRepositoryPort.findByUserId(command.userId()).isPresent()) {
       throw new WalletAlreadyExistsException(command.userId());
     }
     Wallet newWallet = Wallet.create(command.userId());
-    var savedWallet=walletRepositoryPort.save(newWallet);
+    var savedWallet = walletRepositoryPort.save(newWallet);
     return savedWallet.id();
   }
 }

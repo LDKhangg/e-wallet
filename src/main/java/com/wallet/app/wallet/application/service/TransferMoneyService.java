@@ -8,11 +8,10 @@ import com.wallet.app.wallet.application.port.out.WalletRepositoryPort;
 import com.wallet.app.wallet.domain.Transaction;
 import com.wallet.app.wallet.domain.TransactionId;
 import com.wallet.app.wallet.domain.Wallet;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -24,23 +23,24 @@ public class TransferMoneyService implements TransferMoneyUseCase {
   @Override
   @Transactional
   public TransactionId transfer(TransferMoneyCommand command) {
-    Objects.requireNonNull(command,"command must not be null");
-    Transaction transaction = Transaction.start(
-      command.sourceWalletId(),
-      command.destinationWalletId(),
-      command.amount());
+    Objects.requireNonNull(command, "command must not be null");
+    Transaction transaction =
+        Transaction.start(
+            command.sourceWalletId(), command.destinationWalletId(), command.amount());
 
-    Wallet sourceWallet = walletRepositoryPort
-      .findById(transaction.sourceWalletId())
-      .orElseThrow(()->new WalletNotFoundException(transaction.sourceWalletId()));
-    Wallet desitnationWallet = walletRepositoryPort
-      .findById(transaction.destinationWalletId())
-      .orElseThrow(()-> new WalletNotFoundException(transaction.destinationWalletId()));
+    Wallet sourceWallet =
+        walletRepositoryPort
+            .findById(transaction.sourceWalletId())
+            .orElseThrow(() -> new WalletNotFoundException(transaction.sourceWalletId()));
+    Wallet desitnationWallet =
+        walletRepositoryPort
+            .findById(transaction.destinationWalletId())
+            .orElseThrow(() -> new WalletNotFoundException(transaction.destinationWalletId()));
 
     walletRepositoryPort.save(sourceWallet.debit(transaction.amount()));
     walletRepositoryPort.save(desitnationWallet.credit(transaction.amount()));
 
-    Transaction savedTransaction =transactionRepositoryPort.save(transaction.complete());
+    Transaction savedTransaction = transactionRepositoryPort.save(transaction.complete());
     return savedTransaction.id();
   }
 }
