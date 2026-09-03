@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "wallets")
-class WalletJpaEntity {
+public class WalletJpaEntity {
 
   @Id private UUID id;
 
@@ -26,7 +26,7 @@ class WalletJpaEntity {
 
   protected WalletJpaEntity() {}
 
-  WalletJpaEntity(UUID id, UUID userId, BigDecimal balance, long version) {
+  public WalletJpaEntity(UUID id, UUID userId, BigDecimal balance, long version) {
     this.id = id;
     this.userId = userId;
     this.balance = balance;
