@@ -3,12 +3,17 @@ package com.wallet.app.wallet.application.service;
 import com.wallet.app.wallet.application.port.in.TransferMoneyCommand;
 import com.wallet.app.wallet.application.port.in.TransferMoneyUseCase;
 import com.wallet.app.wallet.application.port.in.WalletNotFoundException;
+import com.wallet.app.wallet.application.port.out.EventPublisherPort;
 import com.wallet.app.wallet.application.port.out.TransactionRepositoryPort;
 import com.wallet.app.wallet.application.port.out.WalletRepositoryPort;
 import com.wallet.app.wallet.domain.Transaction;
 import com.wallet.app.wallet.domain.TransactionId;
 import com.wallet.app.wallet.domain.Wallet;
+
+import java.time.Instant;
 import java.util.Objects;
+
+import com.wallet.app.wallet.domain.event.MoneyTransferredEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +24,7 @@ public class TransferMoneyService implements TransferMoneyUseCase {
 
   private final WalletRepositoryPort walletRepositoryPort;
   private final TransactionRepositoryPort transactionRepositoryPort;
+  private final EventPublisherPort eventPublisherPort;
 
   @Override
   @Transactional
@@ -41,6 +47,17 @@ public class TransferMoneyService implements TransferMoneyUseCase {
     walletRepositoryPort.save(desitnationWallet.credit(transaction.amount()));
 
     Transaction savedTransaction = transactionRepositoryPort.save(transaction.complete());
+
+    eventPublisherPort.publishMoneyTransferred(
+      new MoneyTransferredEvent(
+        savedTransaction.id().value().toString(),
+        savedTransaction.sourceWalletId().value().toString(),
+        savedTransaction.destinationWalletId().value().toString(),
+        savedTransaction.amount().amount(),
+        Instant.now()
+      )
+    );
+
     return savedTransaction.id();
   }
 }

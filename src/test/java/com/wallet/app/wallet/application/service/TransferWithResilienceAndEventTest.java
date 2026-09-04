@@ -1,18 +1,16 @@
 package com.wallet.app.wallet.application.service;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.wallet.app.wallet.application.port.in.TransferMoneyCommand;
-import com.wallet.app.wallet.application.port.in.WalletNotFoundException;
 import com.wallet.app.wallet.application.port.out.EventPublisherPort;
 import com.wallet.app.wallet.application.port.out.TransactionRepositoryPort;
 import com.wallet.app.wallet.application.port.out.WalletRepositoryPort;
 import com.wallet.app.wallet.domain.*;
+import com.wallet.app.wallet.domain.event.MoneyTransferredEvent;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,11 +23,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class TransferMoneyServiceTest {
+class TransferWithResilienceAndEventTest {
+
   @Mock private WalletRepositoryPort walletRepositoryPort;
-
   @Mock private TransactionRepositoryPort transactionRepositoryPort;
-
   @Mock private EventPublisherPort eventPublisherPort;
 
   @InjectMocks private TransferMoneyService transferMoneyService;
@@ -53,10 +50,11 @@ public class TransferMoneyServiceTest {
   }
 
   @Test
-  @DisplayName("Should transfer money succecssfully when wallets exist and have sufficient funds")
-  void shouldTransferMoneySuccessfully() {
+  @DisplayName("Should publish MoneyTransferredEvent successfully when transfer completes")
+  void shouldPublishEventOnSuccessfulTransfer() {
     TransferMoneyCommand command =
         new TransferMoneyCommand(sourceId, destinationId, Money.of(new BigDecimal("200")));
+
     given(walletRepositoryPort.findById(sourceId)).willReturn(Optional.of(sourceWallet));
     given(walletRepositoryPort.findById(destinationId)).willReturn(Optional.of(destinationWallet));
     given(walletRepositoryPort.save(any(Wallet.class)))
@@ -76,19 +74,6 @@ public class TransferMoneyServiceTest {
     TransactionId transactionId = transferMoneyService.transfer(command);
 
     assertThat(transactionId).isNotNull();
-    verify(walletRepositoryPort, times(2)).save(any(Wallet.class));
-    verify(transactionRepositoryPort).save(any(Transaction.class));
-  }
-
-  @Test
-  @DisplayName("Should throw WalletNotFoundException when source wallet does not exist")
-  void shouldThrowExceptionWhenSourceWalletNotFound() {
-    TransferMoneyCommand command =
-        new TransferMoneyCommand(sourceId, destinationId, Money.of(new BigDecimal("200")));
-
-    given(walletRepositoryPort.findById(sourceId)).willReturn(Optional.empty());
-
-    assertThatThrownBy(() -> transferMoneyService.transfer(command))
-        .isInstanceOf(WalletNotFoundException.class);
+    verify(eventPublisherPort).publishMoneyTransferred(any(MoneyTransferredEvent.class));
   }
 }

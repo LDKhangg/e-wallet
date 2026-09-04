@@ -19,7 +19,7 @@ public class ExternalBankAdapter implements BankIntegrationPort {
     return true;
   }
 
-  private boolean depositFallback(UserId userId, Money amount, Throwable t){
+  private boolean depositFallback(UserId userId, Throwable t){
     log.error("Fallback triggered for user{} due to: {}",userId.value(),t.getMessage());
     return false;
   }
