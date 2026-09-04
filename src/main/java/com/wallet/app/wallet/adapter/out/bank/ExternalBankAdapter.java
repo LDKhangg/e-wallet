@@ -15,12 +15,12 @@ public class ExternalBankAdapter implements BankIntegrationPort {
   @CircuitBreaker(name = "bankService", fallbackMethod = "depositFallback")
   @Retry(name = "bankService")
   public boolean depositToBank(UserId userId, Money amount) {
-    log.info("Calling external bank API for user {} with amount {}",userId.value(),amount);
+    log.info("Calling external bank API for user {} with amount {}", userId.value(), amount);
     return true;
   }
 
-  private boolean depositFallback(UserId userId, Throwable t){
-    log.error("Fallback triggered for user{} due to: {}",userId.value(),t.getMessage());
+  private boolean depositFallback(UserId userId, Throwable t) {
+    log.error("Fallback triggered for user{} due to: {}", userId.value(), t.getMessage());
     return false;
   }
 }

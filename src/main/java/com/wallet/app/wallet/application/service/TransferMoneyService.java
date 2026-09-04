@@ -9,11 +9,9 @@ import com.wallet.app.wallet.application.port.out.WalletRepositoryPort;
 import com.wallet.app.wallet.domain.Transaction;
 import com.wallet.app.wallet.domain.TransactionId;
 import com.wallet.app.wallet.domain.Wallet;
-
+import com.wallet.app.wallet.domain.event.MoneyTransferredEvent;
 import java.time.Instant;
 import java.util.Objects;
-
-import com.wallet.app.wallet.domain.event.MoneyTransferredEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,14 +47,12 @@ public class TransferMoneyService implements TransferMoneyUseCase {
     Transaction savedTransaction = transactionRepositoryPort.save(transaction.complete());
 
     eventPublisherPort.publishMoneyTransferred(
-      new MoneyTransferredEvent(
-        savedTransaction.id().value().toString(),
-        savedTransaction.sourceWalletId().value().toString(),
-        savedTransaction.destinationWalletId().value().toString(),
-        savedTransaction.amount().amount(),
-        Instant.now()
-      )
-    );
+        new MoneyTransferredEvent(
+            savedTransaction.id().value().toString(),
+            savedTransaction.sourceWalletId().value().toString(),
+            savedTransaction.destinationWalletId().value().toString(),
+            savedTransaction.amount().amount(),
+            Instant.now()));
 
     return savedTransaction.id();
   }

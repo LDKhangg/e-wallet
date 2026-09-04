@@ -19,7 +19,7 @@ public class RabbitMqEventPublisher implements EventPublisherPort {
 
   @Override
   public void publishMoneyTransferred(MoneyTransferredEvent event) {
-    log.info("Publishing MoneyTransferredEvent to RabbitMQ: {}",event);
-    rabbitTemplate.convertAndSend(EXCHANGE,ROUTING_KEY,event);
+    log.info("Publishing MoneyTransferredEvent to RabbitMQ: {}", event);
+    rabbitTemplate.convertAndSend(EXCHANGE, ROUTING_KEY, event);
   }
 }
