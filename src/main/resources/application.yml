@@ -8,3 +8,25 @@ spring:
       ddl-auto: validate
   flyway:
     enabled: true
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    stream:
+      username: guest
+      password: guest
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      bankService:
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        wait-duration-in-open-state:
+          seconds: 10
+  retry:
+    instances:
+      bankService:
+        max-attempts: 3
+        wait-duration:
+          seconds: 1
