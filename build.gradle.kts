@@ -27,6 +27,7 @@ dependencies {
     implementation("io.github.resilience4j:resilience4j-spring-boot3:2.1.0")
     implementation("org.springframework.boot:spring-boot-starter-amqp")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
     testImplementation("org.springframework.amqp:spring-rabbit-test")
     testImplementation("org.testcontainers:rabbitmq")
     runtimeOnly("org.postgresql:postgresql")

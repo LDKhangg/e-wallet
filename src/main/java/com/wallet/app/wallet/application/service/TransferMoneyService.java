@@ -13,6 +13,8 @@ import com.wallet.app.wallet.domain.event.MoneyTransferredEvent;
 import java.time.Instant;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,11 @@ public class TransferMoneyService implements TransferMoneyUseCase {
 
   @Override
   @Transactional
+  @Caching(
+      evict = {
+        @CacheEvict(value = "wallets", key = "#command.sourceWalletId().value()"),
+        @CacheEvict(value = "wallets", key = "#command.destinationWalletId().value()")
+      })
   public TransactionId transfer(TransferMoneyCommand command) {
     Objects.requireNonNull(command, "command must not be null");
     Transaction transaction =

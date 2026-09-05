@@ -8,6 +8,7 @@ import com.wallet.app.wallet.domain.Transaction;
 import com.wallet.app.wallet.domain.TransactionId;
 import com.wallet.app.wallet.domain.Wallet;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,6 +24,7 @@ public class BankDepositStrategy implements DepositStrategy {
   }
 
   @Override
+  @CacheEvict(value = "wallets", key = "#command.walletId().value()")
   public TransactionId deposit(DepositCommand command) {
     Wallet wallet =
         walletRepositoryPort
@@ -32,8 +34,8 @@ public class BankDepositStrategy implements DepositStrategy {
     Wallet updatedWallet = wallet.credit(command.amount());
     walletRepositoryPort.save(updatedWallet);
 
-    Transaction tx = Transaction.start(command.walletId(), command.walletId(), command.amount());
-    Transaction saved = transactionRepositoryPort.save(tx.complete());
+    Transaction tx = Transaction.deposit(command.walletId(), command.amount());
+    Transaction saved = transactionRepositoryPort.save(tx);
     return saved.id();
   }
 }

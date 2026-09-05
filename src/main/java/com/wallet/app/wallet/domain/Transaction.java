@@ -15,16 +15,17 @@ public final class Transaction {
       WalletId sourceWalletId,
       WalletId destinationWalletId,
       Money amount,
-      TransactionStatus status) {
+      TransactionStatus status,
+      boolean allowSameWallet) {
     this.id = Objects.requireNonNull(id, "id must not be null");
     this.sourceWalletId = Objects.requireNonNull(sourceWalletId, "sourceWalletId must not be null");
     this.destinationWalletId =
         Objects.requireNonNull(destinationWalletId, "destinationWalletId must not be null");
-    if (this.sourceWalletId.equals(this.destinationWalletId)) {
+    if (this.sourceWalletId.equals(this.destinationWalletId) && !allowSameWallet) {
       throw new IllegalArgumentException("source and destination wallets must be different");
     }
     this.amount = Objects.requireNonNull(amount, "amount must not be null");
-    if (amount.amount().signum() == 0) {
+    if (amount.amount().signum() <= 0) {
       throw new IllegalArgumentException("amount must be greater than zero");
     }
     this.status = Objects.requireNonNull(status, "status must not be null");
@@ -36,7 +37,13 @@ public final class Transaction {
       WalletId destinationWalletId,
       Money amount,
       TransactionStatus status) {
-    return new Transaction(id, sourceWalletId, destinationWalletId, amount, status);
+    return new Transaction(
+        id,
+        sourceWalletId,
+        destinationWalletId,
+        amount,
+        status,
+        sourceWalletId.equals(destinationWalletId));
   }
 
   public TransactionId id() {
@@ -86,7 +93,18 @@ public final class Transaction {
         sourceWalletId,
         destinationWalletId,
         amount,
-        TransactionStatus.PENDING);
+        TransactionStatus.PENDING,
+        false);
+  }
+
+  public static Transaction deposit(WalletId walletId, Money amount) {
+    Objects.requireNonNull(walletId, "walletId must not be null");
+    Objects.requireNonNull(amount, "amount must not be null");
+    if (amount.amount().signum() <= 0) {
+      throw new IllegalArgumentException("amount must be greater than zero");
+    }
+    return new Transaction(
+        TransactionId.newId(), walletId, walletId, amount, TransactionStatus.COMPLETED, true);
   }
 
   public Transaction complete() {
@@ -95,6 +113,11 @@ public final class Transaction {
     }
 
     return new Transaction(
-        id, sourceWalletId, destinationWalletId, amount, TransactionStatus.COMPLETED);
+        id,
+        sourceWalletId,
+        destinationWalletId,
+        amount,
+        TransactionStatus.COMPLETED,
+        sourceWalletId.equals(destinationWalletId));
   }
 }

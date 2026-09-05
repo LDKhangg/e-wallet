@@ -25,14 +25,11 @@ public class DepositController {
   public ResponseEntity<DepositResponse> deposit(@Valid @RequestBody DepositRequest request) {
     DepositCommand command =
         new DepositCommand(
-            new WalletId(request.walletId()),
-            Money.of(request.amount()),
-            request.methodCode());
+            new WalletId(request.walletId()), Money.of(request.amount()), request.methodCode());
 
     TransactionId transactionId = depositMoneyUseCase.deposit(command);
 
-    DepositResponse response =
-        new DepositResponse(transactionId.value(), "Deposit successful");
+    DepositResponse response = new DepositResponse(transactionId.value(), "Deposit successful");
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 }
